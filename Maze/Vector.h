@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <initializer_list>
+#include <random>
 #define ascending_factor 1.5f
 #define descending_factor .7f
 
@@ -45,7 +46,7 @@ private:
 	}
 
 public:
-	Vector() : _data(nullptr), _size(0), _capacity(CAPACITY) {}
+	Vector() : _data(new T[CAPACITY]), _size(0), _capacity(CAPACITY) {}
 
 	Vector(size_t size) : _size(size), _capacity(size* ascending_factor + 1)
 	{
@@ -189,9 +190,54 @@ public:
 		return Pop();
 	}
 
+	class Iterator 
+	{
+		T* ptr;
+
+	public:
+		Iterator(T* p) : ptr(p) {}
+
+		T& operator*() const { return *ptr; }
+
+		Iterator& operator++() { ++ptr; return *this; }
+
+		Iterator operator++(int) { Iterator tmp = *this; ++ptr; return tmp; }
+
+		bool operator!=(const Iterator& other) const { return ptr != other.ptr; }
+
+		bool operator==(const Iterator& other) const { return ptr == other.ptr; }
+
+		Iterator operator+(int offset) const { return Iterator(ptr + offset); }
+
+		Iterator operator-(int offset) const { return Iterator(ptr - offset); }
+
+		ptrdiff_t operator-(const Iterator& other) const { return ptr - other.ptr; }
+
+		T& operator[](int index) { return ptr[index]; }
+	};
+
+	Iterator begin() { return Iterator(_data); }
+	Iterator end() { return Iterator(_data + _size); }
+
 	~Vector()
 	{
 		delete[] _data;
 	}
 };
+
+template <typename T>
+void Shuffle(Vector<T>& vector, std::mt19937& engine)
+{
+	for (size_t i = vector.Size() - 1; i > 0; i--)
+	{
+		std::uniform_int_distribution<size_t> dist(0, i);
+
+		size_t j = dist(engine);
+
+		T temp = vector[i];
+
+		vector[i] = vector[j];
+		vector[j] = temp;
+	}
+}
 
