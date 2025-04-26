@@ -77,7 +77,9 @@ int main() {
 
   /*  generateMaze(1, 1);
     printMaze();*/
-    Maze().InitMaze();
-    Maze().GenerateMaze();
+    Maze* maze = new Maze();
+    maze->InitMaze();
+    maze->GenerateMaze();
+    maze->PrintMaze();
     return 0;
 }
