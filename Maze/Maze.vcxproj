@@ -134,6 +134,7 @@
     <ClCompile Include="String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HashTable.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="String.h" />

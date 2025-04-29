@@ -3,260 +3,294 @@
 #include "UniquePtr.h"
 #include <windows.h>
 #include "Random.h"
+#include "HashTable.h"
 #define white 7
 #pragma region classes
 
-struct Coord
+class Coord
 {
-	short y, x;
-};
+private:
+    short _y, _x;
 
-struct Cell
-{
-	UniquePtr<Entity> content;
+public:
+    Coord() : _y(0), _x(0) {}
+    Coord(short y, short x) : _y(y), _x(x) {}
+
+    short GetY() const { return _y; }
+    short GetX() const { return _x; }
+
+    void SetY(short y) { _y = y; }
+    void SetX(short x) { _x = x; }
+
+    Coord operator+(const Coord& other) const {
+        return Coord(_y + other._y, _x + other._x);
+    }
+
+    Coord operator-(const Coord& other) const {
+        return Coord(_y - other._y, _x - other._x);
+    }
+
+    Coord& operator+=(const Coord& other) {
+        _y += other._y;
+        _x += other._x;
+        return *this;
+    }
+
+    bool operator==(const Coord& other) const {
+        return _y == other._y && _x == other._x;
+    }
 };
 
 class Moveable
 {
 protected:
-	Coord pos;
+    Coord pos;
 
 public:
-	Coord GetPos() const { return pos; }
+    Coord GetPos() const { return pos; }
 
-	virtual void UpdateDirectory() const = 0;
+    virtual void UpdateDirection() const = 0;
 
-	void Move();
+    void Move();
 
-	virtual ~Moveable() = default;
+    virtual ~Moveable() = default;
 };
 
 class Entity
 {
 public:
-	virtual char GetSymbol() const = 0;
-	virtual int GetColorCode() const = 0;
+    virtual char GetSymbol() const = 0;
+    virtual int GetColorCode() const = 0;
 
-	virtual ~Entity() = default;
+    virtual ~Entity() = default;
+};
+
+struct Cell
+{
+    UniquePtr<Entity> content;
 };
 
 class Item : public Entity
 {
 public:
-	virtual char GetSymbol() const = 0;
-	virtual int GetColorCode() const = 0;
+    virtual char GetSymbol() const = 0;
+    virtual int GetColorCode() const = 0;
+    virtual void Interact() const = 0;
 
-	virtual ~Item() = default;
+    virtual ~Item() = default;
 };
 
 class Key : public Item
 {
 public:
-	char GetSymbol() const override { return 'k'; }
-	int GetColorCode() const override { return 13; }//Enum class replace
+    char GetSymbol() const override { return 'k'; }
+    int GetColorCode() const override { return 13; }
 };
 
 class Life : public Item
 {
 public:
-	char GetSymbol() const override { return '$'; }
-	int GetColorCode() const override { return 3; }//Enum class replace
+    char GetSymbol() const override { return '$'; }
+    int GetColorCode() const override { return 3; }
 };
 
 class Wall : public Entity
 {
 public:
-	char GetSymbol() const override { return '#'; }
-	int GetColorCode() const override { return 7; }
+    char GetSymbol() const override { return '#'; }
+    int GetColorCode() const override { return 7; }
 
-	virtual ~Wall() = default;
+    virtual ~Wall() = default;
 };
 
 class Passage : public Entity
 {
 public:
-	char GetSymbol() const override { return ' '; }
-	int GetColorCode() const override { return 0; }
+    char GetSymbol() const override { return ' '; }
+    int GetColorCode() const override { return 0; }
 };
 
-class Player : public Entity
+class Player : public Entity, public Moveable
 {
-	short _health;
-	short _speed;
+    short _health;
+    short _speed;
 public:
-	char GetSymbol() const override { return '@'; }
-	int GetColorCode() const override { return 1; }
+    char GetSymbol() const override { return '@'; }
+    int GetColorCode() const override { return 1; }
+
+    void UpdateDirection() const override{}
 };
 
-class Enemy : public Entity
+class Enemy : public Entity, public Moveable
 {
-	short _speed;
+    short _speed;
 public:
-	char GetSymbol() const override { return '!'; }
-	int GetColorCode() const override { return 4; }
+    char GetSymbol() const override { return '!'; }
+    int GetColorCode() const override { return 4; }
+
+    void UpdateDirection() const override {}
 };
 
-class Exit : public Entity
+class Exit : public Entity, public Item
 {
 public:
-	char GetSymbol() const override { return 'E'; }
-	int GetColorCode() const override { return 6; }
+    char GetSymbol() const override { return 'E'; }
+    int GetColorCode() const override { return 6; }
 };
 
 #pragma endregion
 
 class Maze
 {
-	const int height = 65; 
-	const int width = 213;
+    const int height = 65;
+    const int width = 213;
 
-	Cell maze[65][217];
+    Cell maze[65][217];
 
-	Random& random;
+    Random& random;
 
 public:
-	Maze(Random& random) : random(random) {};
+    Maze(Random& random) : random(random) {};
 
-	void InitMaze()
-	{
-		for (short i = 0; i < height; i++)
-		{
-			for (short j = 0; j < width; j++)
-			{
-				maze[i][j].content = UniquePtr<Entity>(new Wall());
-			}
-		}
-	}
+    void InitMaze()
+    {
+        for (short i = 0; i < height; i++)
+        {
+            for (short j = 0; j < width; j++)
+            {
+                maze[i][j].content = UniquePtr<Entity>(new Wall());
+            }
+        }
+    }
 
-	void AddToPool(Vector<Entity*>& pool, Entity* object, short count)
-	{
-		for (short i = 0; i < count; i++)
-		{
-			pool.PushBack(object);
-		}
-	}
+    void AddToPool(Vector<Entity*>& pool, Entity* object, short count)
+    {
+        for (short i = 0; i < count; i++)
+        {
+            pool.PushBack(object);
+        }
+    }
 
-	Vector<Entity*> GenerateObjectPool()
-	{
-		Vector<Entity*> objects;
+    Vector<Entity*> GenerateObjectPool()
+    {
+        Vector<Entity*> objects;
 
-		objects.PushBack(new Exit);
-		objects.PushBack(new Key);
+        objects.PushBack(new Exit);
+        objects.PushBack(new Key);
 
-		short enemy_count = random(5, 10);
-		short life_count = random(3, 5);
+        short enemy_count = random(5, 10);
+        short life_count = random(3, 5);
 
-		AddToPool(objects, new Enemy, enemy_count);
-		AddToPool(objects, new Life, life_count);
+        AddToPool(objects, new Enemy, enemy_count);
+        AddToPool(objects, new Life, life_count);
 
-		Shuffle(objects, random.GetEngine());
+        Shuffle(objects, random.GetEngine());
 
-		return objects;
-	}
-	
-	void GenerateMaze(const Coord& start = { 2, 2 })
-	{
-		Stack<Coord> stack;
-		short vacant_squares = (height - 1) * (width - 1) / 16;
+        return objects;
+    }
 
-		stack.Push(start);
-		SetPassage(start, start);
+    void GenerateMaze(const Coord& start = Coord(2, 2))
+    {
+        Stack<Coord> stack;
+        short vacant_squares = (height - 1) * (width - 1) / 16;
+        Vector <Moveable*> moveableObjects;
 
-		maze[start.y][start.x].content = UniquePtr<Entity>(new Player());
-		vacant_squares--;
-		short spawn_rate = vacant_squares;
+        stack.Push(start);
+        SetPassage(start, start);
 
-		Vector<Entity*> objects = GenerateObjectPool();
-		
-		Vector<Coord> offsets = { {4, 0}, {0, 4}, {-4, 0}, {0, -4} };
+        maze[start.GetY()][start.GetX()].content = UniquePtr<Entity>(new Player());
+        vacant_squares--;
+        short spawn_rate = vacant_squares;
 
-		while (!stack.Empty())
-		{
-			Coord current = stack.Top();
+        Vector<Entity*> objects = GenerateObjectPool();
 
-			Shuffle(offsets, random.GetEngine());
+        Vector<Coord> offsets = { Coord(4, 0), Coord(0, 4), Coord(-4, 0), Coord(0, -4) };
 
-			bool moved = false;
-			for (int i = 0; i < offsets.Size(); ++i)
-			{
-				Coord newCoord = { current.y + offsets[i].y, current.x + offsets[i].x };
+        while (!stack.Empty())
+        {
+            Coord current = stack.Top();
 
-				if (newCoord.y > 1 && newCoord.y < height - 1 &&
-  					newCoord.x > 1 && newCoord.x < width - 1 &&
-					dynamic_cast<Wall*>(maze[newCoord.y][newCoord.x].content.get()))
-				{
-					SetPassage(current, newCoord);
+            Shuffle(offsets, random.GetEngine());
 
-					stack.Push(newCoord);
-					moved = true;
+            bool moved = false;
+            for (int i = 0; i < offsets.Size(); ++i)
+            {
+                Coord newCoord = current + offsets[i];
 
-					if(objects.Size() > 0)
-					{
-						short rnd = random(0, spawn_rate);
+                if (newCoord.GetY() > 1 && newCoord.GetY() < height - 1 &&
+                    newCoord.GetX() > 1 && newCoord.GetX() < width - 1 &&
+                    dynamic_cast<Wall*>(maze[newCoord.GetY()][newCoord.GetX()].content.get()))
+                {
+                    SetPassage(current, newCoord);
 
-						if (rnd < objects.Size())
-						{
-							maze[newCoord.y][newCoord.x].content = objects[rnd];
-							objects.Remove(rnd);
-							spawn_rate = --vacant_squares;
-						}
-						else
-						{
-							spawn_rate -= spawn_rate / 20;
-						}
-						break;
-					}
-				}
-			}
+                    stack.Push(newCoord);
+                    moved = true;
 
-			if (!moved)
-			{
-				stack.Pop();
-			}
-		}
-	}
+                    if (objects.Size() > 0)
+                    {
+                        short rnd = random(0, spawn_rate);
 
-	void SetPassage(const Coord& current, const Coord& next)
-	{	
-		for (short i = -1; i < 2; i++)
-		{
-			for (short j = -1; j < 2; j++)
-			{
-				maze[next.y + i][next.x + j].content = UniquePtr<Entity>(new Passage);
-			}
+                        if (rnd < objects.Size())
+                        {
+                            auto moveable = dynamic_cast<Enemy*>(objects[rnd]);
+                            if (moveable) {
+                                moveableObjects.PushBack(moveable);
+                            }
+                            maze[newCoord.GetY()][newCoord.GetX()].content = objects[rnd];
+                            objects.Remove(rnd);
+                            spawn_rate = --vacant_squares;
+                        }
+                        else
+                        {
+                            spawn_rate -= spawn_rate / 20;
+                        }
+                        break;
+                    }
+                }
+            }
 
-			if (current.y - next.y)	{
-				maze[(current.y + next.y) / 2][i + (current.x + next.x) / 2].content = UniquePtr<Entity>(new Passage);
-			}
-			else {
-				maze[i + (current.y + next.y) / 2][(current.x + next.x) / 2].content = UniquePtr<Entity>(new Passage);
-			}
-		}
-	}
+            if (!moved)
+            {
+                stack.Pop();
+            }
+        }
+    }
 
-	void SetColor(int colorCode) {
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, colorCode);
-	}
+    void SetPassage(const Coord& current, const Coord& next)
+    {
+        for (short i = -1; i < 2; i++)
+        {
+            for (short j = -1; j < 2; j++)
+            {
+                maze[next.GetY() + i][next.GetX() + j].content = UniquePtr<Entity>(new Passage);
+            }
 
-	void PrintMaze()
-	{
-		char wall = '#';
-		char passage = ' ';
+            if (current.GetY() - next.GetY()) {
+                maze[(current.GetY() + next.GetY()) / 2][i + (current.GetX() + next.GetX()) / 2].content = UniquePtr<Entity>(new Passage);
+            }
+            else {
+                maze[i + (current.GetY() + next.GetY()) / 2][(current.GetX() + next.GetX()) / 2].content = UniquePtr<Entity>(new Passage);
+            }
+        }
+    }
 
-		for (size_t i = 0; i < height; i++)
-		{
-			for (size_t j = 0; j < width; j++)
-			{
-				SetColor(maze[i][j].content.get()->GetColorCode());
-				std::cout << maze[i][j].content.get()->GetSymbol();
-			}
+    void SetColor(int colorCode) {
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hConsole, colorCode);
+    }
 
-			std::cout << '\n';
+    void PrintMaze()
+    {
+        for (size_t i = 0; i < height; i++)
+        {
+            for (size_t j = 0; j < width; j++)
+            {
+                SetColor(maze[i][j].content.get()->GetColorCode());
+                std::cout << maze[i][j].content.get()->GetSymbol();
+            }
 
-			SetColor(white);
-		}
-	}
+            std::cout << '\n';
+            SetColor(white);
+        }
+    }
 };
-
-
