@@ -77,7 +77,8 @@ int main() {
 
   /*  generateMaze(1, 1);
     printMaze();*/
-    Maze* maze = new Maze();
+    UniquePtr<Random> random = UniquePtr<Random>(new Random);
+    Maze* maze = new Maze(*random);
     maze->InitMaze();
     maze->GenerateMaze();
     maze->PrintMaze();

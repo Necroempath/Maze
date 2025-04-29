@@ -129,11 +129,13 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Stack.h" />
     <ClCompile Include="String.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="UniquePtr.h" />
     <ClInclude Include="Vector.h" />
