@@ -1,6 +1,6 @@
 #pragma once
+#include <thread>
 #include "Maze.h"
-#include <conio.h>
 class Game
 {
 	static UniquePtr<Random> random;

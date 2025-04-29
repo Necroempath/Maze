@@ -13,66 +13,153 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{4fe7a696-23df-41e8-a07d-17796d5710b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Item">
+      <UniqueIdentifier>{c4b0a518-18c9-4658-bc8b-0ff8023e5266}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Moveable">
+      <UniqueIdentifier>{5762c059-d496-4093-af9c-1cdabba12f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{4c6e067b-4580-4d40-a8c2-0d233512e561}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{4301f7c7-8c22-4ac1-bc8b-d57c4a4a2698}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="String.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Stack.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Maze.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Header Files\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Random.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Passage.cpp">
+      <Filter>Header Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Header Files\Entity</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Coord.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="GameEntity.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Header Files\Entity\Moveable</Filter>
+    </ClCompile>
+    <ClCompile Include="Exit.cpp">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleUI.cpp">
+      <Filter>Header Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Key.cpp">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Life.cpp">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Maze.cpp">
+      <Filter>Header Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Moveable.cpp">
+      <Filter>Header Files\Entity\Moveable</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Header Files\Entity\Moveable</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Header Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="String.cpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeedUp.cpp">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Frost.cpp">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Knife.cpp">
+      <Filter>Header Files\Entity\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="String.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Passage.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Wall.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Maze.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Key.h">
+      <Filter>Header Files\Entity\Item</Filter>
     </ClInclude>
-    <ClInclude Include="UniquePtr.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Life.h">
+      <Filter>Header Files\Entity\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Exit.h">
+      <Filter>Header Files\Entity\Item</Filter>
     </ClInclude>
-    <ClInclude Include="HashTable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Entity\Moveable</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Entity\Moveable</Filter>
+    </ClInclude>
+    <ClInclude Include="Moveable.h">
+      <Filter>Header Files\Entity\Moveable</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="InputHandler.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleUI.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Maze.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Coord.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="GameEntity.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="String.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="UniquePtr.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SpeedUp.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Frost.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Knife.h">
+      <Filter>Header Files\Entity\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
