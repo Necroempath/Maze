@@ -1,5 +1,7 @@
 #include "Moveable.h"
 
+void Moveable::SetSpeed(float speed) { _speed = speed; }
+
 Coord Moveable::GetPos() const { return _position; }
 
 bool Moveable::CanMove(float deltaTime)

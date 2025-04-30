@@ -4,8 +4,8 @@ char Knife::GetSymbol() const { return 'X'; }
 
 int Knife::GetColorCode() const { return 13; }
 
-bool Knife::IsPassable() const { return true; }
-
-void Knife::OnTouch() const
+void Knife::OnTouch(GameData& data) const
 {
+	data.knifeActive = true;
+	data.knifeActivationTime = 20;
 }

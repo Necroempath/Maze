@@ -157,6 +157,7 @@
     <ClInclude Include="Frost.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameData.h" />
     <ClInclude Include="HashTable.h" />
     <ClInclude Include="ConsoleUI.h" />
     <ClInclude Include="Item.h" />

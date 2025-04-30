@@ -4,6 +4,6 @@ char Exit::GetSymbol() const { return 'E'; }
 
 int Exit::GetColorCode() const { return 6; }
 
-void Exit::OnTouch() const
+void Exit::OnTouch(GameData& data) const
 {
 }

@@ -6,8 +6,6 @@ class Knife : public Item
 
 	int GetColorCode() const override;
 
-	bool IsPassable() const override;
-
-	void OnTouch() const override;
+	void OnTouch(GameData& data) const override;
 };
 

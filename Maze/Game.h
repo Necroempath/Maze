@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 #include <thread>
 #include "Maze.h"
 class Game
@@ -6,7 +7,7 @@ class Game
 	static UniquePtr<Random> random;
 	static UniquePtr<Maze> maze;
 
-	static void GameLoop(Vector<Moveable*>& moveableObjects);
+	static void GameLoop(GameData& data);
 public:
 	static void LaunchGame();
 	

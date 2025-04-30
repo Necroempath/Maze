@@ -1,5 +1,5 @@
 #pragma once
-#include "Item.h"
+#include "Entity.h"
 class Moveable : public Entity
 {
 protected:
@@ -9,6 +9,8 @@ protected:
 
 public:
 	Moveable(const Coord& position, float speed) : _position(position), _speed(speed) {}
+
+	void SetSpeed(float speed);
 
 	Coord GetPos() const;
 

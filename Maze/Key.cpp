@@ -4,5 +4,8 @@ char Key::GetSymbol() const { return 'k'; }
 
 int Key::GetColorCode() const { return 13; }
 
-void Key::OnTouch() const {};
+void Key::OnTouch(GameData& data) const 
+{
+	data.keysObtained++;
+};
 

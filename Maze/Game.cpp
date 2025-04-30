@@ -1,35 +1,38 @@
 #include "Game.h"
-#include <chrono>
+
 UniquePtr<Random> Game::random = nullptr;
 UniquePtr<Maze> Game::maze = nullptr;
 
 void Game::LaunchGame()
 {
+    GameData data;
+  
     random = UniquePtr<Random>(new Random);
     maze = UniquePtr<Maze>(new Maze(*random));
+    UniquePtr<Player> player = UniquePtr<Player>(new Player(Coord(2, 2), 10, 100));
+    data.player = player.get();
 
     maze->InitMaze();
-    Vector<Moveable*> moveableObjects = maze->GenerateMaze(new Player(Coord(2,2), 10, 100));
-
+    UniquePtr<Vector<Moveable*>> moveableObjects = maze->GenerateMaze(player.get());
+    data.moveableObjects = moveableObjects.get();
     maze->PrintMaze();
-    GameLoop(moveableObjects);
+    
+    GameLoop(data);
 
 }
 
-void Game::GameLoop(Vector<Moveable*>& moveableObjects)
+void Game::GameLoop(GameData& data)
 {
-    bool gameOver = false;
-    bool gameStop = false;
     auto lastTick = std::chrono::steady_clock::now();
    // HashTable<Coord, Item*> hiddenItems;
     ConsoleUI::HideCursor();
-    while (!gameOver)
+    while (!data.gameOver)
     {
         auto now = std::chrono::steady_clock::now();
         float deltaTime = std::chrono::duration<float>(now - lastTick).count();
         lastTick = now;
 
-        for (auto& moveable : moveableObjects)
+        for (auto& moveable : *data.moveableObjects)
         {
             if (moveable->CanMove(deltaTime))
             {
@@ -41,7 +44,7 @@ void Game::GameLoop(Vector<Moveable*>& moveableObjects)
                 {
                     if (auto item = dynamic_cast<Item*>(target); item && dynamic_cast<Player*>(moveable))
                     {
-                        item->OnTouch();
+                        item->OnTouch(data);
                     }
 
                     Passage p;
@@ -53,5 +56,8 @@ void Game::GameLoop(Vector<Moveable*>& moveableObjects)
             }            
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        data.globalTime += deltaTime;
+
+        ConsoleUI::DisplayInfo(data);
     }
 }

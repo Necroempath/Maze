@@ -1,6 +1,6 @@
 #pragma once
 #include "Moveable.h"
-#include "ConsoleUI.h"
+
 class Player : public Moveable
 {
 	short _health;
@@ -14,6 +14,12 @@ public:
 
 	bool IsPassable() const override;
 
+	short GetHealth() const;
+
+	void SetHealth(short health);
+
 	Coord UpdateDirection() const override;
+
+	Coord GetDirection() const;
 };
 

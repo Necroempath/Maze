@@ -161,5 +161,8 @@
     <ClInclude Include="Knife.h">
       <Filter>Header Files\Entity\Item</Filter>
     </ClInclude>
+    <ClInclude Include="GameData.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

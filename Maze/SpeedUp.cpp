@@ -4,6 +4,8 @@ char SpeedUp::GetSymbol() const { return '^'; }
 
 int SpeedUp::GetColorCode() const { return 2; }
 
-bool SpeedUp::IsPassable() const { return true; }
-
-void SpeedUp::OnTouch() const{}
+void SpeedUp::OnTouch(GameData& data) const
+{
+	data.player->SetSpeed(20);
+	data.speedUpTime = 20;
+}

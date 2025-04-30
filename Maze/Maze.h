@@ -22,8 +22,6 @@ struct Cell
 
 class Maze
 {
-
-
 	const int height = 57;
 	const int width = 189;
 
@@ -125,7 +123,7 @@ public:
 						}
 						else
 						{
-							spawn_rate -= spawn_rate / 17;
+							spawn_rate -= spawn_rate / 20;
 						}
 						break;
 					}
