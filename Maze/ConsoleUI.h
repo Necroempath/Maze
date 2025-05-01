@@ -7,7 +7,10 @@
 #include <iomanip>
 class ConsoleUI
 {
+	static void SetCursorPosition(SHORT x, SHORT y);
 public:
+	static short MainMenu();
+
 	static Coord GetDirection();
 
 	static void DrawEntityAt(const Coord& pos, Entity* entity);
@@ -16,6 +19,6 @@ public:
 
 	static void DisplayInfo(const GameData& data);
 
-	static void SetCursorPosition(SHORT x, SHORT y);
+	static void SetConsoleFullScreen();
 };
 

@@ -8,6 +8,7 @@ class Game
 	static UniquePtr<Maze> maze;
 
 	static void GameLoop(GameData& data);
+	static void MainMenuHandler(short option);
 public:
 	static void LaunchGame();
 	

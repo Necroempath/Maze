@@ -1,9 +1,10 @@
 #pragma once
 #include "Player.h"
 #include "Vector.h"
+#include "SharedPtr.h"
 struct GameData
 {
-	Player* player;
+	SharedPtr<Player> player = SharedPtr<Player>(new Player(Coord(2, 2), 10, 3));
 	Vector<Moveable*>* moveableObjects;
 	bool gameOver = false;
 	bool gameStoped = false;

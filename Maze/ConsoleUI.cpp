@@ -1,5 +1,33 @@
 #include "ConsoleUI.h"
 
+void ConsoleUI::SetConsoleFullScreen()
+{
+	HWND hWnd = GetConsoleWindow();
+
+	if (hWnd != nullptr)
+	{
+		keybd_event(VK_MENU, 0x38, 0, 0);
+		keybd_event(VK_RETURN, 0x1C, 0, 0);
+		keybd_event(VK_RETURN, 0x1C, KEYEVENTF_KEYUP, 0);
+		keybd_event(VK_MENU, 0x38, KEYEVENTF_KEYUP, 0);
+	}
+}
+
+short ConsoleUI::MainMenu()
+{
+	std::cout << "Type corresponding number to select an option below:\n\n";
+	std::cout << "1. New game" << '\n';
+	std::cout << "2. Continue" << '\n';
+	std::cout << "3. Achievements" << '\n';
+	std::cout << "4. Game manual" << '\n';
+	std::cout << "5. Exit" << '\n';
+
+	short opt;
+	std::cin >> opt;
+	std::cin.ignore();
+
+	return opt;
+}
 
 Coord ConsoleUI::GetDirection()
 {
@@ -65,7 +93,7 @@ void ConsoleUI::DisplayInfo(const GameData& data)
 	SetCursorPosition(0, infoY);
 	std::cout << "Health: ";
 	SetCursorPosition(xVal, infoY);
-	std::cout << std::setw(5) << data.player->GetHealth() << "   ";
+	std::cout << std::setw(5) << data.player.get()->GetHealth() << "   ";
 
 	SetCursorPosition(0, infoY + 1);
 	std::cout << "Keys obtained: ";

@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Stack.h"
-#include "UniquePtr.h"
+#include "SharedPtr.h"
 #include <windows.h>
 #include "Random.h"
 #include "HashTable.h"
@@ -20,7 +20,7 @@ struct Cell
 	UniquePtr<Entity> content;
 };
 
-class Maze
+class Maze 
 {
 	const int height = 57;
 	const int width = 189;
@@ -51,22 +51,20 @@ public:
 		}
 	}
 
-	Vector<Entity*> GenerateObjectPool()
+	Vector<UniquePtr<Entity>> GenerateObjectPool()
 	{
-		Vector<Entity*> objects;
+		Vector<UniquePtr<Entity>> objects;
 
-		objects.PushBack(new Exit);
-		objects.PushBack(new Key);
+		objects.PushBack(UniquePtr<Entity>(new Exit));
+		objects.PushBack(UniquePtr<Entity>(new Key));
 
-		short enemy_count = random(5, 10);
-		short life_count = random(3, 5);
+		short life_count = random(30, 30);
+		for (short i = 0; i < life_count; ++i)
+			objects.PushBack(UniquePtr<Entity>(new Life));
 
-		//AddToPool(objects, new Enemy, enemy_count);
-		AddToPool(objects, new Life, life_count);
+		//Shuffle(objects, random.GetEngine());
 
-		Shuffle(objects, random.GetEngine());
-
-		return objects;
+		return objects; 
 	}
 
 	Vector<Moveable*> GenerateMaze(Player* player, const Coord& start = Coord(2, 2))
@@ -83,7 +81,7 @@ public:
 		vacant_squares--;
 		short spawn_rate = vacant_squares;
 
-		Vector<Entity*> objects = GenerateObjectPool();
+		Vector<UniquePtr<Entity>> objects = GenerateObjectPool();
 
 		Vector<Coord> offsets = { Coord(4, 0), Coord(0, 4), Coord(-4, 0), Coord(0, -4) };
 
@@ -117,13 +115,13 @@ public:
 							if (moveable) {
 								moveableObjects.PushBack(moveable);
 							}*/
-							maze[_position.GetY()][_position.GetX()].content = objects[rnd];
+							//SetEntityTo(_position, objects[rnd].get());
 							objects.Remove(rnd);
 							spawn_rate = --vacant_squares;
 						}
 						else
 						{
-							spawn_rate -= spawn_rate / 20;
+							spawn_rate -= spawn_rate / 2;
 						}
 						break;
 					}
@@ -155,6 +153,11 @@ public:
 				maze[i + (current.GetY() + next.GetY()) / 2][(current.GetX() + next.GetX()) / 2].content = UniquePtr<Entity>(new Passage);
 			}
 		}
+	}
+
+	void SetEntityTo(const Coord& coord, Entity* entity)
+	{
+		maze[coord.GetY()][coord.GetX()].content = entity;
 	}
 
 	void SetColor(int colorCode) {
