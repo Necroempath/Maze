@@ -124,7 +124,7 @@ std::ostream& operator<<(std::ostream& os, const String& str)
 
 std::istream& operator>>(std::istream& is, String& str)
 {
-	char* buffer = new char[100];
+	char buffer[100];
 	is >> buffer;
 	str = String(buffer);
 	return is;

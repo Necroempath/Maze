@@ -2,6 +2,7 @@
 #include <iostream>
 #include <initializer_list>
 #include <random>
+#include "UniquePtr.h"
 #define ascending_factor 1.5f
 #define descending_factor .7f
 
@@ -241,3 +242,99 @@ void Shuffle(Vector<T>& vector, std::mt19937& engine)
 	}
 }
 
+
+template <typename T>
+class Vector<UniquePtr<T>>
+{
+private:
+	UniquePtr<T>* _data;
+	size_t _size;
+	size_t _capacity;
+
+	static constexpr size_t CAPACITY = 10;
+
+	void ResizeArray(float factor)
+	{
+		size_t new_capacity = static_cast<size_t>(_capacity * factor);
+		if (new_capacity <= _capacity) new_capacity = _capacity + 1;
+
+		UniquePtr<T>* new_data = new UniquePtr<T>[new_capacity];
+
+		for (size_t i = 0; i < _size; ++i)
+		{
+			new_data[i] = std::move(_data[i]);
+		}
+
+		delete[] _data;
+		_data = new_data;
+		_capacity = new_capacity;
+	}
+
+public:
+	Vector() : _data(new UniquePtr<T>[CAPACITY]), _size(0), _capacity(CAPACITY) {}
+
+	explicit Vector(size_t size) : _data(new UniquePtr<T>[size]), _size(size), _capacity(size) {}
+
+	Vector(Vector&& other) noexcept
+		: _data(other._data), _size(other._size), _capacity(other._capacity)
+	{
+		other._data = nullptr;
+		other._size = 0;
+		other._capacity = 0;
+	}
+
+	Vector& operator=(Vector&& other) noexcept
+	{
+		if (this == &other) return *this;
+
+		delete[] _data;
+
+		_data = other._data;
+		_size = other._size;
+		_capacity = other._capacity;
+
+		other._data = nullptr;
+		other._size = 0;
+		other._capacity = 0;
+
+		return *this;
+	}
+
+	Vector(const Vector&) = delete;
+	Vector& operator=(const Vector&) = delete;
+
+	UniquePtr<T>& operator[](size_t index) { return _data[index]; }
+	const UniquePtr<T>& operator[](size_t index) const { return _data[index]; }
+
+	size_t Size() const { return _size; }
+
+	void PushBack(UniquePtr<T> value)
+	{
+		if (_size == _capacity) ResizeArray(1.5f);
+		_data[_size++] = std::move(value);
+	}
+
+	bool Remove(size_t index)
+	{
+		if (index >= _size) return false;
+
+		for (size_t i = index; i < _size - 1; ++i)
+		{
+			_data[i] = std::move(_data[i + 1]);
+		}
+
+		--_size;
+
+		if (_size <= _capacity * 0.7f)
+		{
+			ResizeArray(0.7f);
+		}
+
+		return true;
+	}
+
+	~Vector()
+	{
+		delete[] _data;
+	}
+};

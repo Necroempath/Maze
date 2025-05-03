@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,16 +128,53 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Coord.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Exit.cpp" />
+    <ClCompile Include="Frost.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="ConsoleUI.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Key.cpp" />
+    <ClCompile Include="Knife.cpp" />
+    <ClCompile Include="Life.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="Moveable.cpp" />
+    <ClCompile Include="Passage.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Random.cpp" />
+    <ClCompile Include="SpeedUp.cpp" />
     <ClCompile Include="Stack.h" />
     <ClCompile Include="String.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Coord.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Exit.h" />
+    <ClInclude Include="Frost.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameData.h" />
+    <ClInclude Include="HashTable.h" />
+    <ClInclude Include="ConsoleUI.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="Key.h" />
+    <ClInclude Include="Knife.h" />
+    <ClInclude Include="Life.h" />
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="Moveable.h" />
+    <ClInclude Include="Passage.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="SharedPtr.h" />
+    <ClInclude Include="SpeedUp.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="UniquePtr.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
